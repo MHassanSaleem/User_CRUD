@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import Axios from "axios";
-import CreateUser from "./CreateUser";
+import CreateUser from "./modals/CreateUser";
+import EditUser from "./modals/EditUser";
+import RunAction from "./modals/RunAction";
 
 
 function UserList() {
@@ -25,9 +27,7 @@ function UserList() {
           {/* create user row*/}
           <div className="self-stretch justify-start items-center gap-5 inline-flex">
               <div className="flex grow shrink basis-0 text-gray-900 text-3xl font-bold leading-9">Users</div>
-              <div className="w-[107px] px-6 bg-teal-600 rounded-md justify-center items-center gap-2 flex">
-                  <button className="text-white text-lg font-semibold leading-7" onClick={openModal}>Create</button>
-              </div>
+              <button className="w-[107px] px-6 bg-teal-600 rounded-md justify-center items-center gap-2 flex text-white text-lg font-semibold leading-7" onClick={openModal}>Create</button>
               {/* create user modal */}
               <CreateUser showModal={showModal} closeModal={closeModal} />
           </div>
@@ -61,15 +61,13 @@ function UserList() {
                       </div>
                       <div className="w-[260px] h-[52px] relative bg-white">
                         <div className="w-[234px] left-[18px] top-[10px] absolute justify-start items-start gap-2.5 inline-flex">
-                            <div className="w-[51px] h-8 px-3 bg-blue-500 rounded-md justify-center items-center gap-2 inline-flex">
-                                <button className="text-white text-sm font-semibold leading-tight">Edit</button>
-                            </div>
-                            <div className="w-[68px] h-8 px-3 bg-red-600 rounded-md justify-center items-center gap-2 flex">
-                                <button className="text-white text-sm font-semibold leading-tight">Delete</button>
-                            </div>
-                            <div className="w-24 h-8 px-3 bg-lime-700 rounded-md justify-center items-center gap-2 flex">
-                                <button className="text-white text-sm font-semibold leading-tight">Run action</button>
-                            </div>
+                            <button className="w-[51px] h-8 px-3 bg-blue-500 rounded-md justify-center items-center gap-2 inline-flex text-white text-sm font-semibold leading-tight">Edit</button>
+                            {/* edit user modal */}
+                            <EditUser showModal={showModal} closeModal={closeModal} />
+                            <button className="w-[68px] h-8 px-3 bg-red-600 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight">Delete</button>
+                            <button className="w-24 h-8 px-3 bg-lime-700 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight">Run action</button>
+                            {/* run actions modal */}
+                            <RunAction showModal={showModal} closeModal={closeModal} />
                         </div>
                         <div className="w-[260px] h-px left-0 top-[51px] absolute bg-slate-200" />
                     </div>
