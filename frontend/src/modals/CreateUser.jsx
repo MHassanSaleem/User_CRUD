@@ -1,7 +1,6 @@
 import { useState } from "react"
 import Axios from "axios";
 
-
 function CreateUser({ showModal, closeModal, userCreated }) {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -10,21 +9,25 @@ function CreateUser({ showModal, closeModal, userCreated }) {
 
   const createUser = (e) => {
     e.preventDefault();
-    Axios.post("http://localhost:3001/createUser", { firstname, lastname,email, actions })
+    Axios.post("http://localhost:3001/createUser", { firstname, lastname, email, actions })
       .then((response) => {
-        // reset form fields
-        setFirstname("");
-        setLastname("");
-        setEmail("");
-        setActions([0,0,0,0,]);
-        closeModal();
-        userCreated();
+        // Close the modal after a short delay
+        setTimeout(() => {
+          closeModal();
+          // Reset form fields
+          setFirstname("");
+          setLastname("");
+          setEmail("");
+          setActions([0, 0, 0, 0]);
+          // Trigger any necessary actions after user creation
+          userCreated();
+        }, 100);
       })
       .catch((error) => {
         console.error("Error creating user:", error);
       });
   };
-
+  
   return (
     <div className={`fixed inset-0 z-10 overflow-y-auto ${showModal ? 'block' : 'hidden'}`}>
       <div className="flex items-center justify-center min-h-screen">
@@ -39,19 +42,19 @@ function CreateUser({ showModal, closeModal, userCreated }) {
                     <div className="w-[72px] h-6 px-2 bg-slate-100 rounded-tl-sm rounded-bl-sm border border-slate-200 justify-center items-center gap-2.5 flex">
                         <div className="text-black text-xs font-normal ">Firstname</div>
                     </div>
-                    <input className="grow shrink basis-0 h-6 px-2 bg-white rounded-tr-sm rounded-br-sm border border-slate-200 flex-col justify-center items-center gap-2.5 inline-flex font-normal text-xs" placeholder='Jon' type="text" onChange={(e) => setFirstname(e.target.value)}/>
+                    <input className="grow shrink basis-0 h-6 px-2 bg-white rounded-tr-sm rounded-br-sm border border-slate-200 flex-col justify-center items-center gap-2.5 inline-flex font-normal text-xs" placeholder='Jon' type="text" onChange={(e) => setFirstname(e.target.value)} value={firstname} required/>
                 </div>
                 <div className="self-stretch justify-start items-start inline-flex">
                     <div className="w-[72px] h-6 px-2 bg-slate-100 rounded-tl-sm rounded-bl-sm border border-slate-200 justify-center items-center gap-2.5 flex">
                         <div className="text-black text-xs font-normal ">Lastname</div>
                     </div>
-                    <input className="grow shrink basis-0 h-6 px-2 bg-white rounded-tr-sm rounded-br-sm border border-slate-200 flex-col justify-center items-center gap-2.5 inline-flex font-normal text-xs" placeholder='Doe' type="text" onChange={(e) => setLastname(e.target.value)}/>
+                    <input className="grow shrink basis-0 h-6 px-2 bg-white rounded-tr-sm rounded-br-sm border border-slate-200 flex-col justify-center items-center gap-2.5 inline-flex font-normal text-xs" placeholder='Doe' type="text" onChange={(e) => setLastname(e.target.value)} value={lastname} required/>
                 </div>
                 <div className="self-stretch justify-start items-start inline-flex">
                     <div className="w-[72px] h-6 px-2 bg-slate-100 rounded-tl-sm rounded-bl-sm border border-slate-200 justify-center items-center gap-2.5 flex">
                         <div className="text-black text-xs font-normal ">Email</div>
                     </div>
-                    <input className="grow shrink basis-0 h-6 px-2 bg-white rounded-tr-sm rounded-br-sm border border-slate-200 flex-col justify-center items-center gap-2.5 inline-flex font-normal text-xs" placeholder='j.doe@email.com' type="text" onChange={(e) => setEmail(e.target.value)}/>
+                    <input className="grow shrink basis-0 h-6 px-2 bg-white rounded-tr-sm rounded-br-sm border border-slate-200 flex-col justify-center items-center gap-2.5 inline-flex font-normal text-xs" placeholder='j.doe@email.com' type="text" onChange={(e) => setEmail(e.target.value)} value={email} required/>
                 </div>
                 <div className="flex-col justify-start items-start gap-1 flex">
                     <div className="text-gray-900 text-sm font-bold leading-tight">Actions</div>
@@ -63,8 +66,8 @@ function CreateUser({ showModal, closeModal, userCreated }) {
             </div>
             <div className="self-stretch h-[72px] px-6 py-4 flex-col justify-start items-end gap-2.5 flex">
                 <div className="self-stretch justify-end items-center gap-3 inline-flex">
-                    <button className="w-[86px] h-10 px-4 bg-slate-100 rounded-md justify-center items-center gap-2 flex text-gray-900 text-base font-semibold leading-normal" onClick={closeModal}>Cancel</button>
-                    <button className="w-[85px] h-10 px-4 bg-blue-500 rounded-md justify-center items-center gap-2 flex text-white text-base font-semibold leading-normal">Create</button>
+                    <button className="w-[86px] h-10 px-4 bg-slate-100 rounded-md justify-center items-center gap-2 flex text-gray-900 text-base font-semibold leading-normal" onClick={closeModal} type="button">Cancel</button>
+                    <button className="w-[85px] h-10 px-4 bg-blue-500 rounded-md justify-center items-center gap-2 flex text-white text-base font-semibold leading-normal" type="submit">Create</button>
                 </div>
             </div>
         </div>                      
@@ -75,11 +78,10 @@ function CreateUser({ showModal, closeModal, userCreated }) {
 
 const Checkbox = ({ label }) => {
     return (
-        <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <input type="checkbox" id={label} name={label} className="h-3 w-3 text-blue-600" />
         <label htmlFor={label} className="text-gray-900 text-sm font-normal leading-tight">{label}</label>
-        </div>
-    );
-    };
+      </div>
+    )}
 
 export default CreateUser;

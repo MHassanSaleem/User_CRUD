@@ -3,15 +3,16 @@ import Axios from "axios";
 import CreateUser from "./modals/CreateUser";
 import EditUser from "./modals/EditUser";
 import RunAction from "./modals/RunAction";
-
+import TableHeader from "./components/TableHeader"
 
 function UserList() {
-  
   const [listOfUsers, setListOfUsers] = useState([]);
-  
-  //-----------handling Create User modal
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [refreshList, setRefreshList] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showActionsModal, setShowActionsModal] = useState(false);
+
+  //---handling Create User modal
   const openCreateModal = () => {
     setShowCreateModal(true);
   };
@@ -19,13 +20,10 @@ function UserList() {
     setShowCreateModal(false);
   };  
   const onUserCreated = () => {
-  
-  // Trigger the refetch by toggling refreshList
     setRefreshList((prev) => !prev);
   };
 
-  //---------- handling edit User modal
-  const [showEditModal, setShowEditModal] = useState(false);
+  //--- handling edit User modal
   const openEditModal = () => {
     setShowEditModal(true);
   };
@@ -33,7 +31,7 @@ function UserList() {
     setShowEditModal(false);
   };  
 
-  //----------- Function to delete a user
+  //--- Function to delete a user
   const deleteUser = (userId) => {
     Axios.delete(`http://localhost:3001/deleteUser/${userId}`)
       .then((response) => {
@@ -45,15 +43,13 @@ function UserList() {
       });
   };
 
-  //---------- handling actions modal
-  const [showActionsModal, setShowActionsModal] = useState(false);
+  //--- handling actions modal
   const openActionsModal = () => {
     setShowActionsModal(true);
   };
   const closeActionsModal = () => {
     setShowActionsModal(false);
   };  
-  
   
   //getting list of users
   useEffect(()=>{
@@ -73,45 +69,33 @@ function UserList() {
           </div>
           {/* user table */}
           <div className="w-[804px] p-3 bg-white rounded-xl border border-slate-200 justify-start items-start">
-              {/* table header*/}
-              <div className="grow shrink basis-0 flex flex-row justify-start items-start">
-                <div className="h-10 pt-3 bg-white flex-col justify-end items-center gap-[11px] flex">
-                    <div className="flex w-[212px] text-slate-600 text-xs font-bold leading-none tracking-wide">NAME</div>
-                    <div className="w-[260px] h-px bg-slate-200" />
-                </div>
-                <div className="h-10 pt-3 bg-white flex-col justify-end items-center gap-[11px] flex">
-                    <div className="flex w-[212px] text-slate-600 text-xs font-bold leading-none tracking-wide">EMAIL</div>
-                    <div className="w-[260px] h-px bg-slate-200" />
-                </div>
-                <div className="h-10 pt-3 bg-white flex-col justify-end items-center gap-[11px] flex">
-                    <div className="w-[260px] h-px bg-slate-200" />
-                </div>
-                </div>
-              {/* user data rows*/}
-              {listOfUsers.map((user) => {
-                return(
-                  <div className="grow shrink basis-0 flex flex-row justify-start items-start" key={user._id}>
-                      <div className="h-[52px] pt-4 bg-white flex-col justify-end items-center gap-[15px] flex">
-                          <div className="flex w-[212px] text-gray-700 text-sm font-medium leading-tight">{user.firstname} {user.lastname}</div>
-                          <div className="w-[260px] h-px bg-slate-200" />
-                      </div>
-                      <div className="h-[52px] pt-4 bg-white flex-col justify-end items-center gap-[15px] flex">
-                          <div className="flex w-[212px] text-gray-700 text-sm font-normal leading-tight">{user.email}</div>
-                          <div className="w-[260px] h-px bg-slate-200" />
-                      </div>
-                      <div className="w-[260px] h-[52px] relative bg-white">
-                        <div className="w-[234px] left-[18px] top-[10px] absolute justify-start items-start gap-2.5 inline-flex">
-                            <button className="w-[51px] h-8 px-3 bg-blue-500 rounded-md justify-center items-center gap-2 inline-flex text-white text-sm font-semibold leading-tight" onClick={openEditModal}>Edit</button>
-                            {/* edit user modal */}
-                            <EditUser showModal={showEditModal} closeModal={closeEditModal} />
-                            <button className="w-[68px] h-8 px-3 bg-red-600 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight" onClick={() => deleteUser(user._id)}>Delete</button>
-                            <button className="w-24 h-8 px-3 bg-lime-700 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight" onClick={openActionsModal}>Run action</button>
-                            {/* run actions modal */}
-                            <RunAction showModal={showActionsModal} closeModal={closeActionsModal} />
-                        </div>
-                        <div className="w-[260px] h-px left-0 top-[51px] absolute bg-slate-200" />
+            {/* table header*/}
+            <TableHeader/>
+            {/* user data rows*/}
+            {listOfUsers.map((user) => {
+              return(
+                <div className="grow shrink basis-0 flex flex-row justify-start items-start" key={user._id}>
+                    <div className="h-[52px] pt-4 bg-white flex-col justify-end items-center gap-[15px] flex">
+                        <div className="flex w-[212px] text-gray-700 text-sm font-medium leading-tight">{user.firstname} {user.lastname}</div>
+                        <div className="w-[260px] h-px bg-slate-200" />
                     </div>
+                    <div className="h-[52px] pt-4 bg-white flex-col justify-end items-center gap-[15px] flex">
+                        <div className="flex w-[212px] text-gray-700 text-sm font-normal leading-tight">{user.email}</div>
+                        <div className="w-[260px] h-px bg-slate-200" />
+                    </div>
+                    <div className="w-[260px] h-[52px] relative bg-white">
+                      <div className="w-[234px] left-[18px] top-[10px] absolute justify-start items-start gap-2.5 inline-flex">
+                          <button className="w-[51px] h-8 px-3 bg-blue-500 rounded-md justify-center items-center gap-2 inline-flex text-white text-sm font-semibold leading-tight" onClick={openEditModal}>Edit</button>
+                          {/* edit user modal */}
+                          <EditUser showModal={showEditModal} closeModal={closeEditModal} />
+                          <button className="w-[68px] h-8 px-3 bg-red-600 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight" onClick={() => deleteUser(user._id)}>Delete</button>
+                          <button className="w-24 h-8 px-3 bg-lime-700 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight" onClick={openActionsModal}>Run action</button>
+                          {/* run actions modal */}
+                          <RunAction showModal={showActionsModal} closeModal={closeActionsModal} />
+                      </div>
+                      <div className="w-[260px] h-px left-0 top-[51px] absolute bg-slate-200" />
                   </div>
+                </div>
                   )
                 }
                 )}
