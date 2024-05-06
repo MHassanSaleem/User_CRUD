@@ -6,30 +6,70 @@ import RunAction from "./modals/RunAction";
 
 
 function UserList() {
+  
   const [listOfUsers, setListOfUsers] = useState([]);
-  //handling modal
-  const [showModal, setShowModal] = useState(false);
-  const openModal = () => {
-    setShowModal(true);
+  
+  //-----------handling Create User modal
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [refreshList, setRefreshList] = useState(false);
+  const openCreateModal = () => {
+    setShowCreateModal(true);
   };
-  const closeModal = () => {
-    setShowModal(false);
+  const closeCreateModal = () => {
+    setShowCreateModal(false);
   };  
+  const onUserCreated = () => {
+  
+  // Trigger the refetch by toggling refreshList
+    setRefreshList((prev) => !prev);
+  };
+
+  //---------- handling edit User modal
+  const [showEditModal, setShowEditModal] = useState(false);
+  const openEditModal = () => {
+    setShowEditModal(true);
+  };
+  const closeEditModal = () => {
+    setShowEditModal(false);
+  };  
+
+  //----------- Function to delete a user
+  const deleteUser = (userId) => {
+    Axios.delete(`http://localhost:3001/deleteUser/${userId}`)
+      .then((response) => {
+        // Filter out the deleted user from the list of users
+        setListOfUsers((prevUsers) => prevUsers.filter(user => user._id !== userId));
+      })
+      .catch((error) => {
+        console.error("Error deleting user:", error);
+      });
+  };
+
+  //---------- handling actions modal
+  const [showActionsModal, setShowActionsModal] = useState(false);
+  const openActionsModal = () => {
+    setShowActionsModal(true);
+  };
+  const closeActionsModal = () => {
+    setShowActionsModal(false);
+  };  
+  
+  
   //getting list of users
   useEffect(()=>{
-    Axios.get("http://localhost:3001/getUsers").then((response) => {
+    Axios.get(`http://localhost:3001/getUsers`).then((response) => {
       setListOfUsers(response.data)
     })
-  },[]);
+  },[refreshList]);
 
   return (
       <div className="w-[891px] h-[446px] pl-[37px] pr-[50px] pt-[31px] pb-[66px] bg-white flex-col justify-start items-end gap-[41px] inline-flex">
           {/* create user row*/}
           <div className="self-stretch justify-start items-center gap-5 inline-flex">
               <div className="flex grow shrink basis-0 text-gray-900 text-3xl font-bold leading-9">Users</div>
-              <button className="w-[107px] px-6 bg-teal-600 rounded-md justify-center items-center gap-2 flex text-white text-lg font-semibold leading-7" onClick={openModal}>Create</button>
+              <button className="w-[107px] px-6 bg-teal-600 rounded-md justify-center items-center gap-2 flex text-white text-lg font-semibold leading-7" onClick={openCreateModal}>Create</button>
               {/* create user modal */}
-              <CreateUser showModal={showModal} closeModal={closeModal} />
+              <CreateUser showModal={showCreateModal} closeModal={closeCreateModal} userCreated={onUserCreated} />
           </div>
           {/* user table */}
           <div className="w-[804px] p-3 bg-white rounded-xl border border-slate-200 justify-start items-start">
@@ -50,7 +90,7 @@ function UserList() {
               {/* user data rows*/}
               {listOfUsers.map((user) => {
                 return(
-                  <div className="grow shrink basis-0 flex flex-row justify-start items-start">
+                  <div className="grow shrink basis-0 flex flex-row justify-start items-start" key={user._id}>
                       <div className="h-[52px] pt-4 bg-white flex-col justify-end items-center gap-[15px] flex">
                           <div className="flex w-[212px] text-gray-700 text-sm font-medium leading-tight">{user.firstname} {user.lastname}</div>
                           <div className="w-[260px] h-px bg-slate-200" />
@@ -61,13 +101,13 @@ function UserList() {
                       </div>
                       <div className="w-[260px] h-[52px] relative bg-white">
                         <div className="w-[234px] left-[18px] top-[10px] absolute justify-start items-start gap-2.5 inline-flex">
-                            <button className="w-[51px] h-8 px-3 bg-blue-500 rounded-md justify-center items-center gap-2 inline-flex text-white text-sm font-semibold leading-tight">Edit</button>
+                            <button className="w-[51px] h-8 px-3 bg-blue-500 rounded-md justify-center items-center gap-2 inline-flex text-white text-sm font-semibold leading-tight" onClick={openEditModal}>Edit</button>
                             {/* edit user modal */}
-                            <EditUser showModal={showModal} closeModal={closeModal} />
-                            <button className="w-[68px] h-8 px-3 bg-red-600 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight">Delete</button>
-                            <button className="w-24 h-8 px-3 bg-lime-700 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight">Run action</button>
+                            <EditUser showModal={showEditModal} closeModal={closeEditModal} />
+                            <button className="w-[68px] h-8 px-3 bg-red-600 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight" onClick={() => deleteUser(user._id)}>Delete</button>
+                            <button className="w-24 h-8 px-3 bg-lime-700 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight" onClick={openActionsModal}>Run action</button>
                             {/* run actions modal */}
-                            <RunAction showModal={showModal} closeModal={closeModal} />
+                            <RunAction showModal={showActionsModal} closeModal={closeActionsModal} />
                         </div>
                         <div className="w-[260px] h-px left-0 top-[51px] absolute bg-slate-200" />
                     </div>

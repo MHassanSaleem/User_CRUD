@@ -1,8 +1,7 @@
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose");
-const UserModel = require("./models/Users")
-
+const UserModel = require("./models/Users");
+const app = express();
 const cors = require('cors')
 
 app.use(express.json());
@@ -17,7 +16,6 @@ mongoose.connect("mongodb+srv://dbUser:1122secret@clusteruser.7hh7zjh.mongodb.ne
         console.error("MongoDB connection error:", err);
     });
 
-
 // Endpoint to get all users
   app.get("/getUsers", async (req, res) => {
     try {
@@ -30,26 +28,39 @@ mongoose.connect("mongodb+srv://dbUser:1122secret@clusteruser.7hh7zjh.mongodb.ne
         // and include the error message in the response body
         res.status(500).json({ error: err.message });
     }
-  });
-
+});
 
 // Endpoint to create a new user
-  app.post("/createUser", async (req, res) => {
-    // Extract user data from the request body
-    const user = req.body;
-    // Create a new user instance using the UserModel schema
-    const newUser = new UserModel(user);
-    try {
-        // Save the new user to the database
-        await newUser.save();
-        // Send the created user as JSON response
-        res.json(newUser);
-    } catch (err) {
-        // If an error occurs, send a 500 (Internal Server Error) response
-        // and include the error message in the response body
-        res.status(500).json({ error: err.message });
+app.post("/createUser", async (req, res) => {
+  const { firstname, lastname, email, actions } = req.body;
+  try {
+      const newUser = new UserModel({ firstname, lastname, email , actions });
+      await newUser.save();
+      res.json(newUser);
+  } catch (error) {
+      console.error("Error creating user:", error);
+      res.status(500).json({ error: "Failed to create user" });
+  }
+});
+
+// Endpoint to delete a user by ID
+app.delete("/deleteUser/:id", async (req, res) => {
+  try {
+    // Extract user ID from request parameters
+    const userId = req.params.id;
+    // Find the user by ID and delete it
+    const deletedUser = await UserModel.findByIdAndDelete(userId);
+    // If user not found
+    if (!deletedUser) {
+      return res.status(404).json({ error: 'User not found' });
     }
-  });
+    // If user deleted successfully
+    res.json({ message: 'User deleted successfully', deletedUser });
+  } catch (error) {
+    // If an error occurs, send a 500 (Internal Server Error) response
+    res.status(500).json({ error: error.message });
+  }
+});
 
 
 app.listen(3001, () => {
