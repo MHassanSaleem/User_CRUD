@@ -11,6 +11,7 @@ function UserList() {
   const [refreshList, setRefreshList] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showActionsModal, setShowActionsModal] = useState(false);
+  const [editUser, setEditUser] = useState(null); // State to track the user ID being edited
 
   //---handling Create User modal
   const openCreateModal = () => {
@@ -24,10 +25,12 @@ function UserList() {
   };
 
   //--- handling edit User modal
-  const openEditModal = () => {
+  const openEditModal = (user) => {
+    setEditUser(user); // Set the ID of the user to edit
     setShowEditModal(true);
   };
   const closeEditModal = () => {
+    setEditUser(null);
     setShowEditModal(false);
   };
   const onUserUpdated = () => {
@@ -92,14 +95,14 @@ function UserList() {
                     </div>
                     <div className="w-[260px] h-[52px] relative bg-white">
                       <div className="w-[234px] left-[18px] top-[10px] absolute justify-start items-start gap-2.5 inline-flex">
-                          <button className="w-[51px] h-8 px-3 bg-blue-500 rounded-md justify-center items-center gap-2 inline-flex text-white text-sm font-semibold leading-tight" onClick={openEditModal}>Edit</button>
+                          <button className="w-[51px] h-8 px-3 bg-blue-500 rounded-md justify-center items-center gap-2 inline-flex text-white text-sm font-semibold leading-tight" onClick={() => openEditModal(user)}>Edit</button>
                           {/* edit user modal */}
-                          <EditUser 
-                              showModal={showEditModal} 
-                              closeModal={closeEditModal} 
-                              user={user} 
-                              key={`edit-user-${user._id}`} 
-                              userUpdated={onUserUpdated}
+                          <EditUser
+                            showModal={showEditModal}
+                            closeModal={closeEditModal}
+                            user={editUser}
+                            key={`edit-user-${user._id}`}
+                            userUpdated={onUserUpdated}
                           />
                           <button className="w-[68px] h-8 px-3 bg-red-600 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight" onClick={() => deleteUser(user._id)}>Delete</button>
                           <button className="w-24 h-8 px-3 bg-lime-700 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight" onClick={openActionsModal}>Run action</button>
@@ -112,9 +115,9 @@ function UserList() {
                       <div className="w-[260px] h-px left-0 top-[51px] absolute bg-slate-200" />
                   </div>
                 </div>
-                  )
-                }
-                )}
+              )
+            }
+            )}
           </div>
       </div>
   );

@@ -96,8 +96,4 @@ app.put("/editUser/:id", async (req, res) => {
   }
 });
 
-
-
-app.listen(3001, () => {
-    console.log("going well");
-});
+app.listen(3001, () => {});
