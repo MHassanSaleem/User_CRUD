@@ -42,9 +42,6 @@ in terminal change current directory to /frontend using:
 ### start with installing the required dependencies
 ### `npm install`
 
-### after installation is done run the tests using the following script
-### `npm test`
-
 ### after that, run the main file using the following script
 ### `npm start`
 

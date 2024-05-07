@@ -5,7 +5,12 @@ function EditUser({ user, showModal, userUpdated, closeModal }) {
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
-  const [actions, setActions] = useState([false, false, false, false]);
+  const [actions, setActions] = useState({
+    createItem: false,
+    deleteItem: false,
+    viewItem: false,
+    moveItem: false,
+  });
 
   useEffect(() => {
     if (user) {
@@ -19,7 +24,7 @@ function EditUser({ user, showModal, userUpdated, closeModal }) {
   const editUser = (e) => {
     if (e) e.preventDefault();
     // Submit updated user data
-    Axios.put(`http://localhost:${process.env.PORT}/editUser/${user._id}`, {
+    Axios.put(`http://localhost:3001/editUser/${user._id}`, {
       firstname,
       lastname,
       email,
@@ -30,7 +35,12 @@ function EditUser({ user, showModal, userUpdated, closeModal }) {
         setFirstname('');
         setLastname('');
         setEmail('');
-        setActions([0, 0, 0, 0]);
+        setActions({
+            createItem: false,
+            deleteItem: false,
+            viewItem: false,
+            moveItem: false,
+          });
         userUpdated();
         closeModal();
       })
@@ -38,6 +48,14 @@ function EditUser({ user, showModal, userUpdated, closeModal }) {
         console.error('Error editing user:', error);
       });
   };
+
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    setActions((prevActions) => ({
+      ...prevActions,
+      [name]: checked,
+    }));
+};
 
   return (
     <div
@@ -102,10 +120,10 @@ function EditUser({ user, showModal, userUpdated, closeModal }) {
                   <div className='text-gray-900 text-sm font-bold leading-tight'>
                     Actions
                   </div>
-                  <Checkbox label='Create item' />
-                  <Checkbox label='Delete item' />
-                  <Checkbox label='View item' />
-                  <Checkbox label='Move item' />
+                  <Checkbox checked={actions.createItem} label='Create item' name='createItem' checkboxChange={handleCheckboxChange} />
+                  <Checkbox checked={actions.deleteItem} label='Delete item' name='deleteItem' checkboxChange={handleCheckboxChange}/>
+                  <Checkbox checked={actions.viewItem} label='View item' name='viewItem' checkboxChange={handleCheckboxChange}/>
+                  <Checkbox checked={actions.moveItem} label='Move item' name='moveItem' checkboxChange={handleCheckboxChange}/>
                 </div>
               </div>
               <div className='self-stretch h-[72px] px-6 py-4 flex-col justify-start items-end gap-2.5 flex'>
@@ -134,17 +152,19 @@ function EditUser({ user, showModal, userUpdated, closeModal }) {
   );
 }
 
-const Checkbox = ({ label }) => {
+const Checkbox = ({ label, name, checked, checkboxChange }) => {
   return (
     <div className='flex items-center gap-2'>
       <input
+        checked={checked}
         type='checkbox'
-        id={label}
-        name={label}
+        id={name}
+        name={name}
+        onChange={checkboxChange}
         className='h-3 w-3 text-blue-600'
       />
       <label
-        htmlFor={label}
+        htmlFor={name}
         className='text-gray-900 text-sm font-normal leading-tight'
       >
         {label}
