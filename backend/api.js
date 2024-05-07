@@ -62,6 +62,41 @@ app.delete("/deleteUser/:id", async (req, res) => {
   }
 });
 
+// Fetch a specific user by ID
+app.get("/getUser/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update a specific user by ID
+app.put("/editUser/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { firstname, lastname, email, actions } = req.body;
+    const updatedUser = await UserModel.findByIdAndUpdate(userId, {
+      firstname,
+      lastname,
+      email,
+      actions
+    }, { new: true });
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json({ message: 'User updated successfully', updatedUser });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 
 app.listen(3001, () => {
     console.log("going well");

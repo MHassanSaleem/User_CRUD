@@ -29,6 +29,9 @@ function UserList() {
   };
   const closeEditModal = () => {
     setShowEditModal(false);
+  };
+  const onUserUpdated = () => {
+    setRefreshList((prev) => !prev);
   };  
 
   //--- Function to delete a user
@@ -65,7 +68,11 @@ function UserList() {
               <div className="flex grow shrink basis-0 text-gray-900 text-3xl font-bold leading-9">Users</div>
               <button className="w-[107px] px-6 bg-teal-600 rounded-md justify-center items-center gap-2 flex text-white text-lg font-semibold leading-7" onClick={openCreateModal}>Create</button>
               {/* create user modal */}
-              <CreateUser showModal={showCreateModal} closeModal={closeCreateModal} userCreated={onUserCreated} />
+              <CreateUser 
+                  showModal={showCreateModal} 
+                  closeModal={closeCreateModal} 
+                  userCreated={onUserCreated} 
+              />
           </div>
           {/* user table */}
           <div className="w-[804px] p-3 bg-white rounded-xl border border-slate-200 justify-start items-start">
@@ -87,11 +94,20 @@ function UserList() {
                       <div className="w-[234px] left-[18px] top-[10px] absolute justify-start items-start gap-2.5 inline-flex">
                           <button className="w-[51px] h-8 px-3 bg-blue-500 rounded-md justify-center items-center gap-2 inline-flex text-white text-sm font-semibold leading-tight" onClick={openEditModal}>Edit</button>
                           {/* edit user modal */}
-                          <EditUser showModal={showEditModal} closeModal={closeEditModal} />
+                          <EditUser 
+                              showModal={showEditModal} 
+                              closeModal={closeEditModal} 
+                              user={user} 
+                              key={`edit-user-${user._id}`} 
+                              userUpdated={onUserUpdated}
+                          />
                           <button className="w-[68px] h-8 px-3 bg-red-600 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight" onClick={() => deleteUser(user._id)}>Delete</button>
                           <button className="w-24 h-8 px-3 bg-lime-700 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight" onClick={openActionsModal}>Run action</button>
                           {/* run actions modal */}
-                          <RunAction showModal={showActionsModal} closeModal={closeActionsModal} />
+                          <RunAction 
+                              showModal={showActionsModal} 
+                              closeModal={closeActionsModal} 
+                          />
                       </div>
                       <div className="w-[260px] h-px left-0 top-[51px] absolute bg-slate-200" />
                   </div>
