@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 // Define User Schema
-const UserSchema  = new mongoose.Schema({
-    _id:{
-        type: mongoose.Schema.Types.ObjectId, // Specify the type as ObjectId
-        auto: true, // Set auto to true to let MongoDB generate unique IDs
-        required: true // Make it required if needed
+const UserSchema = new mongoose.Schema({
+    _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        auto: true,
+        required: true
     },
     firstname: {
         type: String,
@@ -20,11 +20,21 @@ const UserSchema  = new mongoose.Schema({
         required: true,
     },
     actions: {
-        type: [Boolean],
-        default: [false, false, false, false] // Default value for all action - unchecked
+        type: {
+            createItem: Boolean,
+            deleteItem: Boolean,
+            viewItem: Boolean,
+            moveItem: Boolean
+        },
+        default: {
+            createItem: false,
+            deleteItem: false,
+            viewItem: false,
+            moveItem: false
+        }
     }
 });
 
 // Create User model
-const UserModel = mongoose.model("users", UserSchema)
+const UserModel = mongoose.model("users", UserSchema);
 module.exports = UserModel;

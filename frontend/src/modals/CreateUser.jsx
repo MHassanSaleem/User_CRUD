@@ -14,12 +14,12 @@ function CreateUser({ showModal, closeModal, userCreated }) {
 
   const createUser = (e) => {
     e.preventDefault();
-    const selectedActions = Object.values(actions).filter((value) => value);
+
     Axios.post('http://localhost:3001/createUser', {
       firstname,
       lastname,
       email,
-      actions: selectedActions,
+      actions
     })
     .then((response) => {
       // Reset form fields
@@ -55,7 +55,7 @@ function CreateUser({ showModal, closeModal, userCreated }) {
       }`}
     >
       <div className='flex items-center justify-center min-h-screen'>
-        <div className='fixed inset-0 bg-gray-500 opacity-75'></div>
+      <div className='fixed inset-0 bg-gray-500 opacity-40'></div>
         <form onSubmit={createUser}>
           <div className='relative w-[448px] h-[366px] bg-white rounded-md shadow flex-col justify-start items-center inline-flex'>
             <div className='self-stretch px-6 py-4 justify-start items-start gap-2.5 inline-flex'>

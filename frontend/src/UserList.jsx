@@ -4,6 +4,9 @@ import CreateUser from "./modals/CreateUser";
 import EditUser from "./modals/EditUser";
 import RunAction from "./modals/RunAction";
 import TableHeader from "./components/TableHeader"
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function UserList() {
   const [listOfUsers, setListOfUsers] = useState([]);
@@ -22,6 +25,7 @@ function UserList() {
   };  
   const onUserCreated = () => {
     setRefreshList((prev) => !prev);
+    toast.success('User created successfully!');
   };
 
   //--- handling edit User modal
@@ -43,6 +47,7 @@ function UserList() {
       .then((response) => {
         // Filter out the deleted user from the list of users
         setListOfUsers((prevUsers) => prevUsers.filter(user => user._id !== userId));
+        toast.error('User deleted!');
       })
       .catch((error) => {
         console.error("Error deleting user:", error);
@@ -107,7 +112,8 @@ function UserList() {
                           <button className="w-[68px] h-8 px-3 bg-red-600 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight" onClick={() => deleteUser(user._id)}>Delete</button>
                           <button className="w-24 h-8 px-3 bg-lime-700 rounded-md justify-center items-center gap-2 flex text-white text-sm font-semibold leading-tight" onClick={openActionsModal}>Run action</button>
                           {/* run actions modal */}
-                          <RunAction 
+                          <RunAction
+                              userActions={user}
                               showModal={showActionsModal} 
                               closeModal={closeActionsModal} 
                           />

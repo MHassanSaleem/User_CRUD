@@ -1,10 +1,10 @@
 import React from 'react';
 
-function RunAction({ showModal, closeModal }) {
+function RunAction({ showModal, closeModal, userActions }) {
   return (
     <div className={`fixed inset-0 z-10 overflow-y-auto ${showModal ? 'block' : 'hidden'}`}>
       <div className="flex items-center justify-center min-h-screen">
-        <div className="fixed inset-0 bg-gray-500 opacity-75"></div>
+        <div className='fixed inset-0 bg-gray-500 opacity-40'></div>
         <div className="relative w-[448px] h-[218px] bg-white rounded-md shadow flex-col justify-start items-center inline-flex">
           <div className="self-stretch px-6 py-4 justify-start items-start gap-2.5 inline-flex">
             <div className="text-gray-700 text-lg font-bold leading-7">Run action</div>

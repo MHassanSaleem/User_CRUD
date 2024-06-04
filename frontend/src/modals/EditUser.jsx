@@ -63,10 +63,7 @@ function EditUser({ user, showModal, userUpdated, closeModal }) {
     >      <div className='fixed inset-0 z-10 overflow-y-auto'>
         <div className='flex items-center justify-center min-h-screen'>
           {/*transparent bg*/}
-          <div
-            className='fixed inset-0 bg-gray-500 opacity-75'
-            aria-hidden='true'
-          ></div>
+          <div className='fixed inset-0 bg-gray-500 opacity-40'></div>
           {/*modal*/}
           <form onSubmit={editUser}>
             <div className='relative w-[448px] h-[366px] bg-white rounded-md shadow flex-col justify-start items-center inline-flex'>
